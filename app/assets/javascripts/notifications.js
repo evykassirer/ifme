@@ -80,6 +80,15 @@ function hideCategoriesMoods() {
   hideBackdrop();
 }
 
+$('#categories_moods').click(function() {
+  hideCategoriesMoods();
+});
+
+$('#categories_moods_text').click(function(event) {
+  event.stopPropagation();
+});
+
+
 function quickCreate(form, data_type) {
   var values = $(form).serialize();
   $.ajax({
@@ -210,7 +219,8 @@ var onReadyNotifications = function() {
     showBackdrop();
   });
 
-  $('.quick_create_close').click(function() {
+  function closeQuickCreate() {
+    console.log($(this));
     if ($(this).closest('.quick_create').attr('id') === 'category_quick_create' && !$('#category_quick_create').hasClass('display_none')) {
       $('#category_quick_create').toggleClass("display_none");
     } else if ($(this).closest('.quick_create').attr('id') === 'mood_quick_create' && !$('#mood_quick_create').hasClass('display_none')) {
@@ -219,6 +229,20 @@ var onReadyNotifications = function() {
       $('#strategy_quick_create').toggleClass("display_none");
     }
     hideBackdrop();
+  }
+
+  $('.quick_create_close').click(closeQuickCreate);
+
+  $('.quick_create').click(closeQuickCreate);
+
+  $(document).keyup(function(event) {
+    if (event.keyCode === 27) {
+      closeQuickCreate.call($('.quick_create_close:not(.display_none)'));
+    }
+  });
+
+  $('.quick_create_text').click(function(event) {
+    event.stopPropagation();
   });
 
   if (newOrEdit(['moments', 'strategies'])) {
